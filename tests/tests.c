@@ -78,6 +78,32 @@ test_loads_two_threads(void)
     return;
 }
 
+/*
+ * test_loads_zero_ops validates the load frunction will
+ * return -1 as an error if given 0 as it's ops count.
+ */
+void
+test_loads_zero_ops(void)
+{
+    int res = loads(0, 1, add);
+    TEST_ASSERT_EQUAL_INT(-1, res);
+    reset();
+    return;
+}
+
+/*
+ * test_loads_zero_threads validates the load frunction will
+ * return -1 as an error if given 0 as it's thread count.
+ */
+void
+test_loads_zero_threads(void)
+{
+    int res = loads(1, 0, add);
+    TEST_ASSERT_EQUAL_INT(-1, res);
+    reset();
+    return;
+}
+
 int
 main(void)
 {
@@ -85,6 +111,8 @@ main(void)
 
     RUN_TEST(test_loads_one_thread);
     RUN_TEST(test_loads_two_threads);
+    RUN_TEST(test_loads_zero_ops);
+    RUN_TEST(test_loads_zero_threads);
 
     return UNITY_END();
 }

@@ -73,42 +73,63 @@ run(void* args)
 int
 loads(const uint64_t ops, const uint64_t thread_count, void (*f)(uint64_t iter))
 {
+    // make sure we have at least 1 operation to perform
+    if (ops < 1) {
+        return -1;
+    }
+
     if (thread_count < 1) {
         return -1;
     }
-    function = f;
-    pthread_t* threads = malloc(sizeof(pthread_t) * thread_count);
 
+    function = f;
     struct timeval start, end, result;
 
-    // start the timer
-    if (gettimeofday(&start, NULL) != 0) {
-        return -1;
-    }
+    // check if the caller wants more than one thread. If so, use pthreads
+    // to distribute the executions across, otherwise directly execute the
+    // function the given number of times in the current thread.
+    if (thread_count > 1) {
+        pthread_t* threads = malloc(sizeof(pthread_t) * thread_count);
 
-    // try to evenly distribute the number of executions across
-    // the given number of threads
-    for (uint64_t j = 0; j < thread_count; j++) {
-        uint64_t start = ops / thread_count * j;
-        uint64_t end = ops / thread_count * (j + 1);
+        // try to evenly distribute the number of executions across
+        // the given number of threads
+        for (uint64_t j = 0; j < thread_count; j++) {
+            uint64_t s = ops / thread_count * j;
+            uint64_t e = ops / thread_count * (j + 1);
 
-        if (j == (thread_count - 1)) {
-            end = ops;
+            if (j == (thread_count - 1)) {
+                e = ops;
+            }
+
+            // start the timer just before execution
+            if (gettimeofday(&start, NULL) != 0) {
+                return -1;
+            }
+
+            // chunk out the executions and pass to the execution thread
+            struct thread_args ta = { .start = s, .end = e };
+            if (pthread_create(&threads[j], NULL, run, &ta) != 0) {
+                return -1;
+            }
         }
 
-        struct thread_args ta = { .start = start, .end = end };
-        if (pthread_create(&threads[j], NULL, run, &ta) != 0) {
+        // collect the threads and wait for them all to complete
+        for (uint64_t j = 0; j < thread_count; j++) {
+            pthread_join(threads[j], NULL);
+        }
+
+        // free the memory allocated for the pthread array
+        free(threads);
+    } else {
+        // start the timer just before execution
+        if (gettimeofday(&start, NULL) != 0) {
             return -1;
         }
-    }
 
-    // collect threa threads and wait for them all to complete
-    for (uint64_t j = 0; j < thread_count; j++) {
-        pthread_join(threads[j], NULL);
+        for (uint64_t j = 0; j < ops; j++) {
+            (function)(j);
+        }
     }
-
-    // free the memory allocated for the pthread array
-    free(threads);
 
     // stop the timer
     if (gettimeofday(&end, NULL) != 0) {

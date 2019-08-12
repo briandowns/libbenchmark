@@ -2,6 +2,10 @@
 
 loads is a small library that provides a single function named `loads` to perform micro-benchmarks on a given function, spread across a given number of threads. This library was heavily inspired by [Tidwall's](github.com/tidwall) [lotsa](github.com/tidwall/lotsa) Go package.
 
+Operation:
+
+`loads` takes 3 arguments. The first is the number of times you want the function executed, the second is the number of threads, and the third, the function you want executed. If either the number of operations or threads is less than 1 `-1` is returned indicating an error state. If the thread count is 1, execution will remain in the current process however if it's larger than 1, execution will be distributed across the threads evenly based on the number of operations given.
+
 ## Example 
 
 ```c
@@ -11,7 +15,7 @@ loads is a small library that provides a single function named `loads` to perfor
 #include "loads.h"
 
 void
-fib(uint64_t i)
+fizz_buzz(uint64_t i)
 {
     if (i % 15 == 0) {
         printf("fizzbuzz\n");
@@ -27,7 +31,7 @@ fib(uint64_t i)
 int
 main(int argc, char** argv)
 {
-    loads(100, 10, fib);
+    loads(100, 10, fizz_buzz);
     return 0;
 }
 ```
