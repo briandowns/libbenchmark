@@ -1,0 +1,90 @@
+/*-
+ * SPDX-License-Identifier: BSD-2-Clause
+ *
+ * Copyright (c) 2019 Brian J. Downs
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <strings.h>
+
+#include "../loads.h"
+#include "unity/unity.h"
+
+static uint64_t overall = 0;
+
+void
+add(uint64_t i)
+{
+    overall += i;
+}
+
+/**
+ * reset returns all values used under test conditions
+ * back to their 0 value for use in new tests.
+ */
+static void
+reset()
+{
+    overall = 0;
+}
+
+/*
+ * test_loads_one_thread validates that the behavior is
+ * as expected operating in a single threaded execution
+ * context.
+ */
+void
+test_loads_one_thread(void)
+{
+    loads(10, 1, add);
+    TEST_ASSERT_EQUAL_UINT64(45, overall);
+    reset();
+    return;
+}
+
+/*
+ * test_loads_two_threads validates that the behavior is
+ * as expected operating in a multi threaded execution
+ * context.
+ */
+void
+test_loads_two_threads(void)
+{
+    loads(10, 2, add);
+    TEST_ASSERT_EQUAL_UINT64(70, overall);
+    reset();
+    return;
+}
+
+int
+main(void)
+{
+    UNITY_BEGIN();
+
+    RUN_TEST(test_loads_one_thread);
+    RUN_TEST(test_loads_two_threads);
+
+    return UNITY_END();
+}
