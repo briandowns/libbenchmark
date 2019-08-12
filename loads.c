@@ -78,6 +78,7 @@ loads(const uint64_t ops, const uint64_t thread_count, void (*f)(uint64_t iter))
         return -1;
     }
 
+    // make sure we don't try to execute with 0 threads
     if (thread_count < 1) {
         return -1;
     }
