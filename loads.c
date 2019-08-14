@@ -138,10 +138,12 @@ loads(const uint64_t ops, const uint64_t thread_count, void (*f)(uint64_t iter))
     }
     timersub(&end, &start, &result);
 
+    int multi_threaded = (thread_count > 1);
+
     // print out the number of threads we're distributing the operations
     // across if more than one thread specified.
     char ss[24];
-    if (thread_count > 1) {
+    if (multi_threaded) {
         sprintf(ss, "over %llu threads ", thread_count);
     }
 
@@ -150,7 +152,7 @@ loads(const uint64_t ops, const uint64_t thread_count, void (*f)(uint64_t iter))
 
     printf("\n%'llu ops %sin %ld.%06ld sec, %0.2f/sec %0.2f ns/op\n",
            ops,
-           (strlen(ss) > 0) ? ss : "",
+           multi_threaded ? ss : "",
            (long int)result.tv_sec,
            (long int)result.tv_usec,
            (float)ops / (float)result.tv_sec,
