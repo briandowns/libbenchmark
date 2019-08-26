@@ -11,6 +11,7 @@ UNAME_S := $(shell uname -s)
 SRCDIR := ./
 TSTDIR := ./tests
 INCDIR := /usr/local/include
+LIBDIR := /usr/local/lib
 
 ifeq ($(UNAME_S),Linux)
 $(NAME).$(VERSION).so:
@@ -25,19 +26,19 @@ endif
 install: 
 	cp $(SRCDIR)/$(NAME).h $(INCDIR)
 ifeq ($(UNAME_S),Linux)
-	cp $(NAME).$(VERSION).so $(INCDIR)
+	cp $(NAME).$(VERSION).so $(LIBDIR)
 endif
 ifeq ($(UNAME_S),Darwin)
-	cp $(NAME).$(VERSION).dylib $(INCDIR)
+	cp $(NAME).$(VERSION).dylib $(LIBDIR)
 endif
 
 uninstall:
 	rm -f $(INCDIR)/$(SRCDIR)/$(NAME).h
 ifeq ($(UNAME_S),Linux)
-	rm -f $(INCDIR)/$(NAME).$(VERSION).so
+	rm -f $(LIBDIR)/$(NAME).$(VERSION).so
 endif
 ifeq ($(UNAME_S),Darwin)
-	rm -f $(INCDIR)/$(NAME).$(VERSION).dylib
+	rm -f $(LIBDIR)/$(NAME).$(VERSION).dylib
 endif
 
 .PHONY:
