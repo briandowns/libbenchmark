@@ -156,7 +156,7 @@ loads(const uint64_t ops, const uint64_t thread_count, void (*f)(uint64_t iter))
            (long int)result.tv_sec,
            (long int)result.tv_usec,
            (float)ops / (float)result.tv_sec,
-           (float)((float)result.tv_usec * 1000) / (float)ops);
+           (float)((float)(result.tv_usec * 1000)) / (float)ops);
 
     return 0;
 }
