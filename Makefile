@@ -1,49 +1,50 @@
 CC      = cc
-CFLAGS  = -Wall
+CFLAGS  = -Wall -fPIC -O3 -c
 LDFLAGS = 
 
-NAME    = loads
+NAME    = libloads
+VERSION = 01
 
-VERSION := 01
-
-UNAME_S := $(shell uname -s)
-
-SRCDIR := ./
 TSTDIR := ./tests
 INCDIR := /usr/local/include
 LIBDIR := /usr/local/lib
 
+UNAME_S := $(shell uname -s)
+
 ifeq ($(UNAME_S),Linux)
 $(NAME).$(VERSION).so:
-	$(CC) -shared -o $(NAME).$(VERSION).so $(SRCDIR)/$(NAME).c $(CFLAGS)
+	$(CC) $(CFLAGS) -shared -o $(NAME).$(VERSION).so loads.c  $(LDFLAGS)
 endif
 ifeq ($(UNAME_S),Darwin)
 $(NAME).$(VERSION).dylib:
-	$(CC) -dynamiclib -o $(NAME).$(VERSION).dylib $(SRCDIR)/$(NAME).c $(CFLAGS) $(LDFLAGS)
+	$(CC) $(CFLAGS) -dynamiclib -o $(NAME).$(VERSION).dylib loads.c  $(LDFLAGS)
 endif
 
 .PHONY: install
 install: 
-	cp $(SRCDIR)/$(NAME).h $(INCDIR)
+	cp loads.h $(INCDIR)
 ifeq ($(UNAME_S),Linux)
 	cp $(NAME).$(VERSION).so $(LIBDIR)
 endif
 ifeq ($(UNAME_S),Darwin)
 	cp $(NAME).$(VERSION).dylib $(LIBDIR)
+	ln -s $(LIBDIR)/$(NAME).$(VERSION).dylib $(LIBDIR)/$(NAME).dylib
 endif
 
 uninstall:
-	rm -f $(INCDIR)/$(SRCDIR)/$(NAME).h
+	rm -f $(INCDIR)/loads.h
 ifeq ($(UNAME_S),Linux)
 	rm -f $(LIBDIR)/$(NAME).$(VERSION).so
+	rm -f $(LIBDIR)/$(VERSION).so
 endif
 ifeq ($(UNAME_S),Darwin)
 	rm -f $(LIBDIR)/$(NAME).$(VERSION).dylib
+	rm -f $(LIBDIR)/$(NAME).dylib
 endif
 
 .PHONY:
 test: clean
-	$(CC) -o $(TSTDIR)/$(TSTDIR) $(TSTDIR)/$(TSTDIR).c $(SRCDIR)/loads.c $(TSTDIR)/unity/unity.c $(CFLAGS)
+	$(CC) -o $(TSTDIR)/$(TSTDIR) $(TSTDIR)/$(TSTDIR).c loads.c $(TSTDIR)/unity/unity.c $(CFLAGS)
 	$(TSTDIR)/$(TSTDIR)
 	rm -f $(TSTDIR)/$(TSTDIR)
 
