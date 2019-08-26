@@ -147,7 +147,7 @@ loads(const uint64_t ops, const uint64_t thread_count, void (*f)(uint64_t iter))
         sprintf(ss, "over %llu threads ", thread_count);
     }
 
-    // bring in the ability to use a single quote to format an integer with commas
+    // bring in the ability to use a "'" to format an integer with commas
     setlocale(LC_NUMERIC, "");
 
     printf("\n%'llu ops %sin %ld.%06ld sec, %0.2f/sec %0.2f ns/op\n",

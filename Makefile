@@ -1,5 +1,5 @@
 CC      = cc
-CFLAGS  = -Wall -fPIC -O3 -c
+CFLAGS  = -Wall -fPIC -O3
 LDFLAGS = 
 
 NAME    = libloads
@@ -13,11 +13,11 @@ UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Linux)
 $(NAME).$(VERSION).so:
-	$(CC) $(CFLAGS) -shared -o $(NAME).$(VERSION).so loads.c  $(LDFLAGS)
+	$(CC) -c $(CFLAGS) -shared -o $(NAME).$(VERSION).so loads.c  $(LDFLAGS)
 endif
 ifeq ($(UNAME_S),Darwin)
 $(NAME).$(VERSION).dylib:
-	$(CC) $(CFLAGS) -dynamiclib -o $(NAME).$(VERSION).dylib loads.c  $(LDFLAGS)
+	$(CC) -c $(CFLAGS) -dynamiclib -o $(NAME).$(VERSION).dylib loads.c  $(LDFLAGS)
 endif
 
 .PHONY: install

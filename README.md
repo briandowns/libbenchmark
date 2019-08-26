@@ -1,4 +1,8 @@
-# loads
+# libloads
+
+[![travis](https://img.shields.io/travis/briandowns/loads.svg)](https://travis-ci.org/briandowns/loads/)
+[![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/briandowns/loads?style=plastic)
 
 loads is a small library that provides a single function named `loads` to perform micro-benchmarks on a given function, spread across a given number of threads. This library was heavily inspired by [Tidwall's](github.com/tidwall) [lotsa](github.com/tidwall/lotsa) Go package.
 
