@@ -1,7 +1,7 @@
 /*-
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (c) 2019 Brian J. Downs
+ * Copyright (c) 2020 Brian J. Downs
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,12 +29,12 @@
 #include <stdlib.h>
 #include <strings.h>
 
-#include "../loads.h"
+#include "../benchmark.h"
 #include "unity/unity.h"
 
 static uint64_t overall = 0;
 
-void
+static void
 add(uint64_t i)
 {
     overall += i;
@@ -51,54 +51,54 @@ reset()
 }
 
 /*
- * test_loads_one_thread validates that the behavior is
+ * test_benchmark_one_thread validates that the behavior is
  * as expected operating in a single threaded execution
  * context.
  */
 void
-test_loads_one_thread(void)
+test_benchmark_one_thread(void)
 {
-    loads(10, 1, add);
+    benchmark(10, 1, add);
     TEST_ASSERT_EQUAL_UINT64(45, overall);
     reset();
     return;
 }
 
 /*
- * test_loads_two_threads validates that the behavior is
+ * test_benchmark_two_threads validates that the behavior is
  * as expected operating in a multi threaded execution
  * context.
  */
 void
-test_loads_two_threads(void)
+test_benchmark_two_threads(void)
 {
-    loads(10, 2, add);
+    benchmark(10, 2, add);
     TEST_ASSERT_EQUAL_UINT64(70, overall);
     reset();
     return;
 }
 
 /*
- * test_loads_zero_ops validates the load frunction will
+ * test_benchmark_zero_ops validates the load frunction will
  * return -1 as an error if given 0 as it's ops count.
  */
 void
-test_loads_zero_ops(void)
+test_benchmark_zero_ops(void)
 {
-    int res = loads(0, 1, add);
+    int res = benchmark(0, 1, add);
     TEST_ASSERT_EQUAL_INT(-1, res);
     reset();
     return;
 }
 
 /*
- * test_loads_zero_threads validates the load frunction will
+ * test_benchmark_zero_threads validates the load frunction will
  * return -1 as an error if given 0 as it's thread count.
  */
 void
-test_loads_zero_threads(void)
+test_benchmark_zero_threads(void)
 {
-    int res = loads(1, 0, add);
+    int res = benchmark(1, 0, add);
     TEST_ASSERT_EQUAL_INT(-1, res);
     reset();
     return;
@@ -109,10 +109,10 @@ main(void)
 {
     UNITY_BEGIN();
 
-    RUN_TEST(test_loads_one_thread);
-    RUN_TEST(test_loads_two_threads);
-    RUN_TEST(test_loads_zero_ops);
-    RUN_TEST(test_loads_zero_threads);
+    RUN_TEST(test_benchmark_one_thread);
+    RUN_TEST(test_benchmark_two_threads);
+    RUN_TEST(test_benchmark_zero_ops);
+    RUN_TEST(test_benchmark_zero_threads);
 
     return UNITY_END();
 }

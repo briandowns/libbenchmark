@@ -2,7 +2,7 @@ CC      = cc
 CFLAGS  = -Wall -fPIC -O3
 LDFLAGS = 
 
-NAME    = libloads
+NAME    = libbenchmark
 VERSION = 01
 
 TSTDIR := ./tests
@@ -13,16 +13,16 @@ UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Linux)
 $(NAME).$(VERSION).so:
-	$(CC) -c $(CFLAGS) -shared -o $(NAME).$(VERSION).so loads.c  $(LDFLAGS)
+	$(CC) -c $(CFLAGS) -shared -o $(NAME).$(VERSION).so benchmark.c  $(LDFLAGS)
 endif
 ifeq ($(UNAME_S),Darwin)
 $(NAME).$(VERSION).dylib:
-	$(CC) -c $(CFLAGS) -dynamiclib -o $(NAME).$(VERSION).dylib loads.c  $(LDFLAGS)
+	$(CC) -c $(CFLAGS) -dynamiclib -o $(NAME).$(VERSION).dylib benchmark.c  $(LDFLAGS)
 endif
 
 .PHONY: install
 install: 
-	cp loads.h $(INCDIR)
+	cp benchmark.h $(INCDIR)
 ifeq ($(UNAME_S),Linux)
 	cp $(NAME).$(VERSION).so $(LIBDIR)
 endif
@@ -32,7 +32,7 @@ ifeq ($(UNAME_S),Darwin)
 endif
 
 uninstall:
-	rm -f $(INCDIR)/loads.h
+	rm -f $(INCDIR)/benchmark.h
 ifeq ($(UNAME_S),Linux)
 	rm -f $(LIBDIR)/$(NAME).$(VERSION).so
 	rm -f $(LIBDIR)/$(VERSION).so
@@ -44,7 +44,7 @@ endif
 
 .PHONY:
 test: clean
-	$(CC) -o $(TSTDIR)/$(TSTDIR) $(TSTDIR)/$(TSTDIR).c loads.c $(TSTDIR)/unity/unity.c $(CFLAGS)
+	$(CC) -o $(TSTDIR)/$(TSTDIR) $(TSTDIR)/$(TSTDIR).c benchmark.c $(TSTDIR)/unity/unity.c $(CFLAGS)
 	$(TSTDIR)/$(TSTDIR)
 	rm -f $(TSTDIR)/$(TSTDIR)
 

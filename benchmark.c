@@ -35,10 +35,10 @@
 #include <sys/time.h>
 #include <time.h>
 
-#include "loads.h"
+#include "benchmark.h"
 
 /**
- * function is a variable that is assigned to from the loads function
+ * function is a variable that is assigned from the benchmark function
  * that contains the function passed in for benchmarking. It's defined
  * here so it can be accessed by the run function later on.
  */
@@ -71,7 +71,7 @@ run(void* args)
 }
 
 int
-loads(const uint64_t ops, const uint64_t thread_count, void (*f)(uint64_t iter))
+benchmark(const uint64_t ops, const uint64_t thread_count, void (*f)(uint64_t iter))
 {
     // make sure we have at least 1 operation to perform
     if (ops < 1) {

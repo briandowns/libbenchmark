@@ -25,19 +25,19 @@
  * SUCH DAMAGE.
  */
 
-#ifndef _LOADS_H
-#define _LOADS_H
+#ifndef _BENCHMARK_H
+#define _BENCHMARK_H
 
 #include <stdint.h>
 
 /**
- * loads is a function used to run micro-benchmarks on the given
+ * benchmark is a function used to run micro-benchmarks on the given
  * function. The arguments are the number of operations to be
  * performed, the number of threads to distribute the operations
- * across, and the function to be run. loads will return 0 on
+ * across, and the function to be run. benchmark will return 0 on
  * success and -1 on failure.
  */
 int
-loads(const uint64_t ops, const uint64_t thread_count, void (*f)(uint64_t i));
+benchmark(const uint64_t ops, const uint64_t thread_count, void (*f)(uint64_t i));
 
-#endif /** _LOADS_H */
+#endif /** _BENCHMARK_H */
