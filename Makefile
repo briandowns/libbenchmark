@@ -1,4 +1,5 @@
-CC      = cc
+CC = cc
+
 CFLAGS  = -Wall -fPIC -O3
 LDFLAGS = 
 
@@ -12,11 +13,11 @@ LIBDIR := /usr/local/lib
 UNAME_S := $(shell uname -s)
 
 ifeq ($(UNAME_S),Linux)
-$(NAME).$(VERSION).so:
+$(NAME).$(VERSION).so: clean
 	$(CC) -c $(CFLAGS) -shared -o $(NAME).$(VERSION).so benchmark.c  $(LDFLAGS)
 endif
 ifeq ($(UNAME_S),Darwin)
-$(NAME).$(VERSION).dylib:
+$(NAME).$(VERSION).dylib: clean
 	$(CC) -c $(CFLAGS) -dynamiclib -o $(NAME).$(VERSION).dylib benchmark.c  $(LDFLAGS)
 endif
 

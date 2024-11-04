@@ -1,7 +1,7 @@
 /*-
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (c) 2020 Brian J. Downs
+ * Copyright (c) 2024 Brian J. Downs
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,6 +37,7 @@
 
 #include "benchmark.h"
 
+
 /**
  * function is a variable that is assigned from the benchmark function
  * that contains the function passed in for benchmarking. It's defined
@@ -61,9 +62,9 @@ struct thread_args
  * iterations it should perform in that given thread.
  */
 void*
-run(void* args)
+run(void *args)
 {
-    struct thread_args* ta = (struct thread_args*)args;
+    struct thread_args *ta = (struct thread_args*)args;
     for (uint64_t j = ta->start; j < ta->end; j++) {
         (function)(j);
     }
@@ -144,13 +145,13 @@ benchmark(const uint64_t ops, const uint64_t thread_count, void (*f)(uint64_t it
     // across if more than one thread specified.
     char ss[24];
     if (multi_threaded) {
-        sprintf(ss, "over %llu threads ", thread_count);
+        sprintf(ss, "over %lu threads ", thread_count);
     }
 
     // bring in the ability to use a "'" to format an integer with commas
     setlocale(LC_NUMERIC, "");
 
-    printf("\n%'llu ops %sin %ld.%06ld sec, %0.2f/sec %0.2f ns/op\n",
+    printf("\n%'lu ops %sin %ld.%06ld sec, %0.2f/sec %0.2f ns/op\n",
            ops,
            multi_threaded ? ss : "",
            (long int)result.tv_sec,
