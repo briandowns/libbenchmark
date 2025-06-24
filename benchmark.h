@@ -1,7 +1,7 @@
 /*-
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (c) 2024 Brian J. Downs
+ * Copyright (c) 2025 Brian J. Downs
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -37,7 +37,7 @@
  * across, and the function to be run. benchmark will return 0 on
  * success and -1 on failure.
  */
-int
+int8_t
 benchmark(const uint64_t ops, const uint64_t thread_count, void (*f)(uint64_t i));
 
 #endif /** _BENCHMARK_H */

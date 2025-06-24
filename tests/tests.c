@@ -1,7 +1,7 @@
 /*-
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (c) 2020 Brian J. Downs
+ * Copyright (c) 2025 Brian J. Downs
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -25,8 +25,7 @@
  * SUCH DAMAGE.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <stdint.h>
 #include <strings.h>
 
 #include "../benchmark.h"
@@ -85,7 +84,7 @@ test_benchmark_two_threads(void)
 void
 test_benchmark_zero_ops(void)
 {
-    int res = benchmark(0, 1, add);
+    int8_t res = benchmark(0, 1, add);
     TEST_ASSERT_EQUAL_INT(-1, res);
     reset();
     return;
@@ -98,7 +97,7 @@ test_benchmark_zero_ops(void)
 void
 test_benchmark_zero_threads(void)
 {
-    int res = benchmark(1, 0, add);
+    int8_t res = benchmark(1, 0, add);
     TEST_ASSERT_EQUAL_INT(-1, res);
     reset();
     return;

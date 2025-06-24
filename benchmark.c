@@ -1,7 +1,7 @@
 /*-
  * SPDX-License-Identifier: BSD-2-Clause
  *
- * Copyright (c) 2024 Brian J. Downs
+ * Copyright (c) 2025 Brian J. Downs
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -27,6 +27,7 @@
 
 #include <locale.h>
 #include <pthread.h>
+#include <stdint.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -71,7 +72,7 @@ run(void *args)
     pthread_exit(NULL);
 }
 
-int
+int8_t
 benchmark(const uint64_t ops, const uint64_t thread_count, void (*f)(uint64_t iter))
 {
     // make sure we have at least 1 operation to perform
