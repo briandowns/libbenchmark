@@ -12,35 +12,29 @@ LIBDIR := /usr/local/lib
 
 UNAME_S := $(shell uname -s)
 
-ifeq ($(UNAME_S),Linux)
-$(NAME).$(VERSION).so: clean
-	$(CC) -c $(CFLAGS) -shared -o $(NAME).$(VERSION).so benchmark.c  $(LDFLAGS)
-endif
 ifeq ($(UNAME_S),Darwin)
-$(NAME).$(VERSION).dylib: clean
-	$(CC) -c $(CFLAGS) -dynamiclib -o $(NAME).$(VERSION).dylib benchmark.c  $(LDFLAGS)
+$(NAME).dylib: clean
+	$(CC) -c $(CFLAGS) -dynamiclib -o $(NAME).dylib benchmark.c  $(LDFLAGS)
+else
+$(NAME).so: clean
+	$(CC) -shared $(CFLAGS) -o $(NAME).so benchmark.c  $(LDFLAGS)
 endif
 
 .PHONY: install
 install: 
 	cp benchmark.h $(INCDIR)
-ifeq ($(UNAME_S),Linux)
-	cp $(NAME).$(VERSION).so $(LIBDIR)
-endif
 ifeq ($(UNAME_S),Darwin)
-	cp $(NAME).$(VERSION).dylib $(LIBDIR)
-	ln -s $(LIBDIR)/$(NAME).$(VERSION).dylib $(LIBDIR)/$(NAME).dylib
+	cp $(NAME).dylib $(LIBDIR)
+else
+	cp $(NAME).so $(LIBDIR)
 endif
 
 uninstall:
 	rm -f $(INCDIR)/benchmark.h
-ifeq ($(UNAME_S),Linux)
-	rm -f $(LIBDIR)/$(NAME).$(VERSION).so
-	rm -f $(LIBDIR)/$(VERSION).so
-endif
 ifeq ($(UNAME_S),Darwin)
-	rm -f $(LIBDIR)/$(NAME).$(VERSION).dylib
 	rm -f $(LIBDIR)/$(NAME).dylib
+else
+	rm -f $(LIBDIR)/$(NAME).so
 endif
 
 .PHONY:
